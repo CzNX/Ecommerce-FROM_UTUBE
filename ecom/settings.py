@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'lf)drp+*2y#2_4j8_qz4x!(5-_gf0uv3qwj%!&3evm-9s3tm-6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [*]
 
 
 # Application definition
@@ -129,6 +129,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'ryukxtha12@gmail.com'
-EMAIL_HOST_PASSWORD = 'zdzsokxglehekxix'
+EMAIL_HOST_USER = 'youremail'
+EMAIL_HOST_PASSWORD = 'uremailpass'
 EMAIL_USE_TLS = True
