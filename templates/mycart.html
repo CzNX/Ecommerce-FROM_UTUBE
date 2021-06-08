@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}my Cart{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <h1>My Cart</h1>
+            <hr>
+            <table class="table">
+                <thead>
+                    <th>SN</th>
+                    <th>Product</th>
+                    <th>Rate</th>
+                    <th>Quantity</th>
+                    <th>Subtotal</th>
+                    <th>Action</th>
+                </thead>
+                <tbody> 
+                    {% for c in cart.cartproduct_set.all %}
+                    <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{c.product}}</td>
+                    <td>{{c.rate}}</td>
+                    <td>{{c.quantity}}</td>
+                    <td>{{c.subtotal}}</td>
+                    <td>
+                        <a href='{% url "ecomapp:managecart" c.id%}?action=inc' class="btn btn-success">+</a>
+                        <a href='{% url "ecomapp:managecart" c.id%}?action=dcr'class="btn btn-warning">-</a>
+                        <a href='{% url "ecomapp:managecart" c.id%}?action=rmv'class="btn btn-danger">X</a>
+                    </td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <th colspan="4" class="text-right">Total</th>
+                        <th>Rs: {{cart.total}}</th>
+                        {%if cart.cartproduct_set.all%}
+                            <th><a href='{% url "ecomapp:emptycart" %}' class="btn btn-danger">Empty Cart</a></th>
+                            <th><a href='{% url "ecomapp:checkout" %}' class="btn btn-info"> CheckOut</a></th>
+                        {% endif %}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div> 
+</div>
+
+
+{% endblock %}
