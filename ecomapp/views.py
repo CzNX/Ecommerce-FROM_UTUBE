@@ -42,7 +42,7 @@ class HomeView(EcomMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['myname'] = "Dipak Niroula"
+        context['myname'] = "XYZ"
         all_products = Product.objects.all().order_by("-id")
         paginator = Paginator(all_products, 4)
         page_number = self.request.GET.get('page')
@@ -193,7 +193,7 @@ class CheckoutView(EcomMixin,CreateView):
     form_class = CheckoutForm
     success_url = reverse_lazy('ecomapp:home')
 
-    def dispatch(self, request, *args, **kwargs):                  #like init executed before ever method
+    def dispatch(self, request, *args, **kwargs):                  #like __init__ executed before every method
         if request.user.is_authenticated and request.user.customer:
             pass
         else:
@@ -213,7 +213,7 @@ class CheckoutView(EcomMixin,CreateView):
         context['cart']=cart_obj
 
         return context
-    def form_valid(self, form):   #form_valid method is a type of post method and is available in createview formview and updateview
+    def form_valid(self, form):                         #form_valid method is a type of post method available in createview formview and updateview
         cart_id = self.request.session.get("cart_id")
         if cart_id:
             cart_obj = Cart.objects.get(id=cart_id)
@@ -319,12 +319,12 @@ class CustomerRegistrationView(CreateView):
     form_class = CustomerRegistrationForm
     success_url = reverse_lazy('ecomapp:home')
 
-    def form_valid(self, form):             #to handle /customize form (can use any post method here)
-        username = form.cleaned_data.get("username")    #form.cleaned_data.get('fieldname') to get data
+    def form_valid(self, form):                                 #to handle /customize form (can use any post method here)
+        username = form.cleaned_data.get("username")             #form.cleaned_data.get('fieldname') to get data
         password = form.cleaned_data.get("password")
         email = form.cleaned_data.get("email")
-        user = User.objects.create_user(username, email, password)  #create user manually
-        form.instance.user = user    #supply currently created user to make customer registration
+        user = User.objects.create_user(username, email, password)         #create user manually
+        form.instance.user = user                                    #supply currently created user to make customer registration
         login(self.request, user)
         return super().form_valid(form)
 
@@ -351,7 +351,7 @@ class CustomerLoginView(FormView):
     def form_valid(self, form):
         uname = form.cleaned_data.get('username')   
         password = form.cleaned_data.get('password')
-        usr = authenticate(username=uname,password=password)   #if no match None is returned
+        usr = authenticate(username=uname,password=password)                 #if no match None is returned
         if usr is not None and Customer.objects.filter(user=usr).exists():
             login(self.request,usr)
         else:
@@ -382,9 +382,9 @@ class CustomerProfileView(TemplateView):
         customer = self.request.user.customer
         # print(customer)
         context['customer'] = customer
-        orders = Order.objects.filter(cart__customer=customer).order_by("-id")   # Field Lookups i.e fieldname__lookuptype=value
-        context["orders"] = orders                           #also =  ( __ ) To Reference Foreign Key Model Class’s Attribute.
-        return context                                  #user__username = 'tom' eg
+        orders = Order.objects.filter(cart__customer=customer).order_by("-id")             # Field Lookups i.e fieldname__lookuptype=value
+        context["orders"] = orders                                                   #also =  ( __ ) To Reference Foreign Key Model Class’s Attribute.
+        return context                                                                  #user__username = 'tom' eg
 
 
 class CustomerOrderDetailView(DetailView):
@@ -411,7 +411,7 @@ class AdminLoginView(FormView):
     def form_valid(self, form):
         uname = form.cleaned_data.get('username')   
         password = form.cleaned_data.get('password')
-        usr = authenticate(username=uname,password=password)   #if no match None is returned
+        usr = authenticate(username=uname,password=password)                       #if no match None is returned
         if usr is not None and Admin.objects.filter(user=usr).exists():
             login(self.request,usr)
         else:
@@ -469,7 +469,7 @@ class SearchView(TemplateView):
         kw = self.request.GET.get("keyword")
         results = Product.objects.filter(
             Q(title__icontains=kw) | Q(description__icontains=kw) | Q(return_policy__icontains=kw))   
-                # used to implement or logic in search mechanism
+                                                                                                  # Q used to implement or logic in search mechanism
         print(results)
         context["results"] = results
         return context
@@ -489,7 +489,7 @@ class PasswordForgotView(FormView):
         # get email from user
         email = form.cleaned_data.get("email")
         # get current host ip/domain
-        url = self.request.META['HTTP_HOST']                     # 127.0.0.1:8000/
+        url = self.request.META['HTTP_HOST']                                              # 127.0.0.1:8000/
         # get customer and then user
         customer = Customer.objects.get(user__email=email)
         user = customer.user
@@ -499,9 +499,9 @@ class PasswordForgotView(FormView):
             "/" + password_reset_token.make_token(user) + "/"
         send_mail(
             'Password Reset Link | Django Ecommerce',
-            text_content + html_content,            #token=anxegi-bc37df1e0629e5715d365b41af6ce3aa/
-            settings.EMAIL_HOST_USER,
-            [email,'ryukxtha12@gmail.com'],
+            text_content + html_content,                                              #token=anxegi-bc37df1e0629e5715d365b4asdsadasd/
+            settings.EMAIL_HOST_USER,                                      #sender 
+            [email,'ryukxtha12@gmail.com'],                                    #receivers
             fail_silently=False,
         )
         return super().form_valid(form)
@@ -526,7 +526,7 @@ class PasswordResetView(FormView):
         password = form.cleaned_data['new_password']
         email = self.kwargs.get("email")
         user = User.objects.get(email=email)
-        user.set_password(password)            #set_password is a User object method
+        user.set_password(password)                                      #set_password is a User object method
         user.save()
         return super().form_valid(form)
 
@@ -553,8 +553,8 @@ class AdminProductCreateView(AdminRequiredMixin, CreateView):
     success_url = reverse_lazy("ecomapp:adminproductlist")
 
     def form_valid(self, form):
-        p = form.save()          #just created form is saved by p
-        images = self.request.FILES.getlist("more_images")  #To retrieve more_image variable from our Form
+        p = form.save()                                                              #just created form is saved in p
+        images = self.request.FILES.getlist("more_images")                       #To retrieve  'more_image'  variable from our Form
         for i in images:
             ProductImage.objects.create(product=p, image=i)
         return super().form_valid(form)
